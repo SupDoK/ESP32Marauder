@@ -76,11 +76,9 @@ class CaptiveRequestHandler : public AsyncWebHandler {
 public:
   CaptiveRequestHandler() {}
   virtual ~CaptiveRequestHandler() {}
-
   bool canHandle(AsyncWebServerRequest *request) { return true; }
-
   void handleRequest(AsyncWebServerRequest *request) {
-    request->send_P(200, "text/html", index_html);
+    request->redirect("http://172.0.0.1/");
   }
 };
 

